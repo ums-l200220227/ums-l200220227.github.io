@@ -26,12 +26,36 @@ class kuliah_informatika(FlowSpec):
     def attend_classes(self):
         """Langkah menghadiri kelas"""
         print("Menghadiri kelas dan berpartisipasi dalam berbagai kegiatan...")
+        self.total_attend = 14
+        self.presence = 0
+
+        for i in range(1, self.total_attend + 1):
+            attend = True  # Simulasi kehadiran
+            if attend:
+                self.presence += 1
+            print(f"Hari {i}: {'Hadir' if attend else 'Tidak hadir'}")
+        self.min_attend = int(0.75 * self.total_attend)
+        if self.presence >= self.min_attend:
+            print("Memenuhi persyaratan kehadiran")
+        else:
+            print("Tidak memenuhi persyaratan kehadiran")
+            self.next(self.end)
         self.next(self.receive_grades)
 
     @step
     def receive_grades(self):
-        """Langkah menerima nilai"""
-        print("Menerima nilai akhir dan mengevaluasi kinerja...")
+        """Langkah menerima nilai UTS dan UAS"""
+        self.midterm_grade = 80  # Nilai UTS
+        self.final_grade = 90  # Nilai UAS
+        print(f"Nilai UTS: {self.midterm_grade}")
+        print(f"Nilai UAS: {self.final_grade}")
+        self.next(self.calculate_final_score)
+
+    @step
+    def calculate_final_score(self):
+        """Menghitung nilai akhir berdasarkan UTS dan UAS"""
+        self.final_score = (self.midterm_grade + self.final_grade) / 2
+        print(f"Nilai akhir: {self.final_score}")
         self.next(self.end)
 
     @step
