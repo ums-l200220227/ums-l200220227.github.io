@@ -49,11 +49,11 @@
 <h4>2. Membersihkan dan menggabungkan data</h4>
 <p>Baca file teks menggunakan Python, lakukan pembersihan data (hapus metadata seperti tanggal, waktu, dan nama pengirim menggunakan <code>regex</code>). Gabungkan data bersih menjadi file CSV bernama <code>data_group.csv</code>.</p>
 
-```python<br>
-import re<br>
-import pandas as pd<br>
-<br>
-def clean_data(file):<br>
+<pre><code>
+import re
+import pandas as pd
+
+def clean_data(file):
     with open(file, 'r', encoding='utf-8') as f:
         lines = f.readlines()
     cleaned_data = []
@@ -68,22 +68,24 @@ group1 = clean_data('group1.txt')
 group2 = clean_data('group2.txt')
 all_data = group1 + group2
 df = pd.DataFrame(all_data, columns=['Message'])
-df.to_csv('data_group.csv', index=False)```
+df.to_csv('data_group.csv', index=False)
+</code></pre>
 
 
 <h4>3. Mengompresi file CSV</h4> <p>File <code>data_group.csv</code> dikompresi menjadi <code>data_group.tar.gz</code> menggunakan pustaka <code>tarfile</code>.</p>
 
-```
+<pre><code>
 import tarfile
 
 tar_file = 'data_group.tar.gz'
 with tarfile.open(tar_file, 'w:gz') as tar:
     tar.add('data_group.csv')
-```
+</code></pre>
 
 <h4>4. Melakukan clustering dengan algoritma K-Means</h4> <p>Proses clustering dilakukan dengan mengubah teks menjadi fitur numerik menggunakan <code>CountVectorizer</code>, lalu menerapkan algoritma K-Means dengan berbagai nilai k.</p>
 
-```from sklearn.feature_extraction.text import CountVectorizer
+<pre><code>
+from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.cluster import KMeans
 
 # Vektorisasi teks
@@ -96,4 +98,5 @@ kmeans.fit(X)
 
 # Hasil clustering
 df['Cluster'] = kmeans.labels_
-df.to_csv('clustered_data.csv', index=False)```
+df.to_csv('clustered_data.csv', index=False)
+</code></pre>
