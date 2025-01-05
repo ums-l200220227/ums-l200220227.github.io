@@ -44,16 +44,16 @@
 
 <h4><b>Cara Pengerjaan</b></h4>
 <h4>1. Melakukan eksport data dari dua grup WhatsApp</h4>
-<p>Menggunakan fitur "Export Chat" dari WhatsApp, hasilnya disimpan dalam file teks (.txt) dengan encoding UTF-8.</p>
+<p>Menggunakan fitur "Export Chat" dari WhatsApp, hasilnya disimpan dalam file teks (.txt).</p>
 
 <h4>2. Membersihkan dan menggabungkan data</h4>
 <p>Baca file teks menggunakan Python, lakukan pembersihan data (hapus metadata seperti tanggal, waktu, dan nama pengirim menggunakan <code>regex</code>). Gabungkan data bersih menjadi file CSV bernama <code>data_group.csv</code>.</p>
 
-```python
-import re
-import pandas as pd
-
-def clean_data(file):
+```python<br>
+import re<br>
+import pandas as pd<br>
+<br>
+def clean_data(file):<br>
     with open(file, 'r', encoding='utf-8') as f:
         lines = f.readlines()
     cleaned_data = []
