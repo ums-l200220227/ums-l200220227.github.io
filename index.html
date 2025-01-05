@@ -20,6 +20,7 @@
 
 <h4>4. Dengan menggunakan algoritma Kmeans melakukan CLUSTERING</h4>  -->
 
+
 <h1><b>Nama  : Pandu Adi Wijaya Kusuma Wardana</b></h1>
 <h1><b>NIM   : L200220227</b></h1>
 <h1><b>Kelas : D</b></h1>
@@ -38,78 +39,61 @@
 <h3><b>TUGAS sebelum UAS INFRASTRUKTUR dan PLATFORM SAINS DATA</b></h3>
 <h4><b>Deskripsi</b></h4>
 <ul>
-    <li>Melakukan eksplorasi dan analisis data dari dua grup WhatsApp yang berbeda.</li>
-    <li>Menggunakan algoritma K-Means untuk melakukan clustering pada data yang telah dibersihkan.</li>
+    <li>Melakukan eksplorasi dan analisis data dari dua grup WhatsApp menggunakan algoritma K-Means.</li>
 </ul>
 
 <h4><b>Cara Pengerjaan</b></h4>
-<h4><b>Langkah-langkah:</b></h4>
-<ol>
-    <li><b>Eksport Data dari Grup WhatsApp:</b>
-        <ul>
-            <li>Ekspor data percakapan dari dua grup WhatsApp dalam format file teks (.txt).</li>
-            <li>Pastikan data teks disimpan dengan encoding yang mendukung karakter khusus (contoh: UTF-8).</li>
-        </ul>
-    </li>
-    <li><b>Pembersihan dan Penggabungan Data:</b>
-        <ul>
-            <li>Baca kedua file teks menggunakan Python.</li>
-            <li>Ekstrak pesan teks dari data dengan memisahkan metadata seperti tanggal, waktu, dan nama pengirim.</li>
-            <li>Hapus pesan sistem dan data lain yang tidak relevan.</li>
-            <li>Gabungkan data bersih ke dalam satu file CSV bernama <code>data_group.csv</code>.</li>
-        </ul>
-    </li>
-    <li><b>Kompresi Data:</b>
-        <ul>
-            <li>Kompresi file <code>data_group.csv</code> ke dalam format tar.gz menggunakan pustaka <code>tarfile</code>.</li>
-        </ul>
-    </li>
-    <li><b>Clustering dengan K-Means:</b>
-        <ul>
-            <li>Gunakan algoritma K-Means untuk melakukan clustering pada data teks.</li>
-            <li>Hitung matriks data dengan <code>CountVectorizer</code> untuk memproses teks menjadi fitur numerik.</li>
-            <li>Lakukan iterasi dengan berbagai nilai <code>k</code> untuk menentukan jumlah cluster optimal.</li>
-        </ul>
-    </li>
-    <li><b>Analisis Hasil:</b>
-        <ul>
-            <li>Identifikasi kata-kata kunci (top words) pada setiap cluster.</li>
-            <li>Buat laporan hasil clustering, termasuk pola yang ditemukan dalam data.</li>
-        </ul>
-    </li>
-</ol>
+<h4>1. Melakukan eksport data dari dua grup WhatsApp</h4>
+<p>Menggunakan fitur "Export Chat" dari WhatsApp, hasilnya disimpan dalam file teks (.txt) dengan encoding UTF-8.</p>
 
-<h4><b>Implementasi Program</b></h4>
-<ol>
-    <li><b>Eksport dan Pembersihan Data:</b>
-        <ul>
-            <li>Menggunakan Python untuk membaca file teks dan membersihkan data dengan regex.</li>
-            <li>Proses ini menghasilkan file <code>data_group.csv</code> yang hanya berisi pesan teks bersih.</li>
-        </ul>
-    </li>
-    <li><b>Kompresi Data:</b>
-        <ul>
-            <li>File <code>data_group.csv</code> dikompresi menjadi <code>data_group.tgz</code>.</li>
-        </ul>
-    </li>
-    <li><b>Clustering dengan K-Means:</b>
-        <ul>
-            <li>Proses clustering dilakukan dengan memanfaatkan <code>sklearn.cluster.KMeans</code>.</li>
-            <li>Pipeline clustering dibangun menggunakan Metaflow untuk mengotomatisasi eksperimen dengan berbagai nilai <code>k</code>.</li>
-        </ul>
-    </li>
-    <li><b>Analisis Hasil:</b>
-        <ul>
-            <li>Hasil clustering dianalisis untuk menentukan pola dalam data, seperti kata-kata kunci pada tiap cluster.</li>
-        </ul>
-    </li>
-</ol>
+<h4>2. Membersihkan dan menggabungkan data</h4>
+<p>Baca file teks menggunakan Python, lakukan pembersihan data (hapus metadata seperti tanggal, waktu, dan nama pengirim menggunakan <code>regex</code>). Gabungkan data bersih menjadi file CSV bernama <code>data_group.csv</code>.</p>
 
-<h4><b>Kesimpulan</b></h4>
-<ul>
-    <li>Data dari dua grup WhatsApp berhasil diekspor, dibersihkan, dan digabungkan menjadi satu file CSV.</li>
-    <li>Data yang bersih dikompresi ke dalam format <code>tar.gz</code> untuk pengelolaan yang lebih efisien.</li>
-    <li>Algoritma K-Means berhasil digunakan untuk melakukan clustering pada data teks, dan hasil clustering menunjukkan pola yang berguna.</li>
-    <li>Pipeline Metaflow mempermudah eksperimen dengan berbagai nilai <code>k</code>.</li>
-</ul>
+```python
+import re
+import pandas as pd
 
+def clean_data(file):
+    with open(file, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+    cleaned_data = []
+    for line in lines:
+        match = re.search(r'^\[\d{2}/\d{2}/\d{4}, \d{2}:\d{2}\] .*?: (.+)', line)
+        if match:
+            cleaned_data.append(match.group(1))
+    return cleaned_data
+
+# Proses gabungan
+group1 = clean_data('group1.txt')
+group2 = clean_data('group2.txt')
+all_data = group1 + group2
+df = pd.DataFrame(all_data, columns=['Message'])
+df.to_csv('data_group.csv', index=False)```
+
+
+<h4>3. Mengompresi file CSV</h4> <p>File <code>data_group.csv</code> dikompresi menjadi <code>data_group.tar.gz</code> menggunakan pustaka <code>tarfile</code>.</p>
+
+```
+import tarfile
+
+tar_file = 'data_group.tar.gz'
+with tarfile.open(tar_file, 'w:gz') as tar:
+    tar.add('data_group.csv')
+```
+
+<h4>4. Melakukan clustering dengan algoritma K-Means</h4> <p>Proses clustering dilakukan dengan mengubah teks menjadi fitur numerik menggunakan <code>CountVectorizer</code>, lalu menerapkan algoritma K-Means dengan berbagai nilai k.</p>
+
+```from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.cluster import KMeans
+
+# Vektorisasi teks
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(df['Message'])
+
+# Clustering
+kmeans = KMeans(n_clusters=3, random_state=42)
+kmeans.fit(X)
+
+# Hasil clustering
+df['Cluster'] = kmeans.labels_
+df.to_csv('clustered_data.csv', index=False)```
